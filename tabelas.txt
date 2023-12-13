@@ -1,0 +1,20 @@
+CREATE TABLE IF NOT EXISTS Pessoa (
+    pessoa_id INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
+    entrada_tempo DATETIME,
+    saida_tempo DATETIME
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+
+CREATE TABLE IF NOT EXISTS LogEmail (
+    log_id INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
+    pessoa_id INT,
+    assunto VARCHAR(255),
+    corpo TEXT
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+
+CREATE TABLE IF NOT EXISTS Usuario (
+    usuario_id INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
+    username VARCHAR(50) UNIQUE NOT NULL,
+    email VARCHAR(30) UNIQUE,
+    telefone VARCHAR(15) UNIQUE,
+    senha VARCHAR(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
