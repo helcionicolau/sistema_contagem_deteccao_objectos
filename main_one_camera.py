@@ -14,10 +14,11 @@ from threading import Thread
 # Carregar os sons desejados
 # sound_3_or_more = pygame.mixer.Sound("sound_3_or_more.wav")
 
-# Configurações de e-mail
-email_address = "helcio05nicolau@gmail.com"
-email_password = "nfcb nmob jfcb nvis"
-recipient_email = "helcio05business@gmail.com"
+# Importe as configurações do arquivo config.py
+# from config import email_address, email_password, recipient_email
+# Importe as credenciais do arquivo credentials.py
+from credentials import email_address, email_password, recipient_email
+
 
 # Caminhos do modelo Caffe
 protopath = "MobileNetSSD_deploy.prototxt"
@@ -270,7 +271,7 @@ def process_camera(url, index):
         cv2.putText(
             frame,
             info_text,
-            (W - 250, 30),
+            (5, 130),
             cv2.FONT_HERSHEY_COMPLEX_SMALL,
             1,
             (0, 255, 0),
