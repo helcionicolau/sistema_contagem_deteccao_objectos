@@ -19,6 +19,7 @@ email_address = "helcio05nicolau@gmail.com"
 email_password = "nfcb nmob jfcb nvis"
 recipient_email = "helcio05business@gmail.com"
 
+# Caminhos do modelo Caffe
 protopath = "MobileNetSSD_deploy.prototxt"
 modelpath = "MobileNetSSD_deploy.caffemodel"
 detector = cv2.dnn.readNetFromCaffe(prototxt=protopath, caffeModel=modelpath)
@@ -27,30 +28,14 @@ detector = cv2.dnn.readNetFromCaffe(prototxt=protopath, caffeModel=modelpath)
 # detector.setPreferableBackend(cv2.dnn.DNN_BACKEND_INFERENCE_ENGINE)
 # detector.setPreferableTarget(cv2.dnn.DNN_TARGET_CPU)
 
+# Lista de classes para detecção
 CLASSES = [
-    "background",
-    "aeroplane",
-    "bicycle",
-    "bird",
-    "boat",
-    "bottle",
-    "bus",
-    "car",
-    "cat",
-    "chair",
-    "cow",
-    "diningtable",
-    "dog",
-    "horse",
-    "motorbike",
-    "person",
-    "pottedplant",
-    "sheep",
-    "sofa",
-    "train",
-    "tvmonitor",
+    "background", "aeroplane", "bicycle", "bird", "boat", "bottle", "bus", "car", "cat", "chair", 
+    "cow", "diningtable", "dog", "horse", "motorbike", "person", "pottedplant", "sheep", "sofa", 
+    "train", "tvmonitor",
 ]
 
+# Inicialização do tracker de centroides
 tracker = CentroidTracker(maxDisappeared=80, maxDistance=90)
 
 # Dicionário para armazenar o tempo de entrada e saída de cada pessoa
@@ -60,7 +45,7 @@ total_objects_count = 0
 entered_count = 0
 exited_count = 0
 
-
+# Função para supressão rápida de não-máximo
 def non_max_suppression_fast(boxes, overlapThresh):
     try:
         if len(boxes) == 0:
@@ -102,7 +87,7 @@ def non_max_suppression_fast(boxes, overlapThresh):
     except Exception as e:
         print("Exception occurred in non_max_suppression : {}".format(e))
 
-
+# Função para enviar e-mails
 def send_email(subject, body):
     try:
         msg = MIMEText(body)
@@ -118,7 +103,7 @@ def send_email(subject, body):
     except Exception as e:
         print("Exception occurred in send_email : {}".format(e))
 
-
+# Função para processar uma câmera
 def process_camera(url, index):
     global total_objects_count, entered_count, exited_count
     cap = cv2.VideoCapture(url)
@@ -127,7 +112,7 @@ def process_camera(url, index):
     fps = 0
     total_frames = 0
     lpc_count = 0
-    op_count = 0
+    opc_count = 0
     object_id_list = []
 
     objects = {}
@@ -140,7 +125,7 @@ def process_camera(url, index):
             break
 
         # Reduzir o tamanho da imagem de entrada
-        frame = imutils.resize(frame, width=640)
+        frame = imutils.resize(frame, width=520)
 
         total_frames = total_frames + 1
 
@@ -300,7 +285,7 @@ def process_camera(url, index):
         if opc_count >= 3:
             winsound.Beep(1000, 500)  # Exemplo: Frequência 1000 Hz, duração 500 ms
 
-        cv2.imshow(f"Camera {index + 1}", frame)
+        cv2.imshow(f"Camera {index + 1} - {'Sala de Monitoramento' if index == 0 else ('Afrilearning' if index == 1 else 'NomeDaTerceiraCamera')}", frame)
         key = cv2.waitKey(1)
         if key == ord("q"):
             break
@@ -308,11 +293,11 @@ def process_camera(url, index):
     cap.release()
     cv2.destroyAllWindows()
 
-
+# Função principal
 def main():
     # Lista de URLs das câmeras
     urls = [
-        'rtsp://admin:Afrizona2022@192.168.1.10:554/Streaming/Channels/0',
+        'rtsp://admin:Afrizona2022@192.168.1.56:554/Streaming/Channels/0',
         'rtsp://admin:Afrizona2022@192.168.1.3:554/Streaming/Channels/1',
         'rtsp://admin:Afrizona2022@192.168.1.61:554/Streaming/Channels/2',
         # Adicione mais URLs conforme necessário
@@ -320,7 +305,6 @@ def main():
 
     # Processa apenas a primeira câmera da lista
     process_camera(urls[0], 0)
-
 
 if __name__ == "__main__":
     main()
