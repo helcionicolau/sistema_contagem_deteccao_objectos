@@ -140,7 +140,7 @@ def process_camera(url, index):
             break
 
         # Reduzir o tamanho da imagem de entrada
-        frame = imutils.resize(frame, width=580)
+        frame = imutils.resize(frame, width=640)
 
         total_frames = total_frames + 1
 
@@ -171,7 +171,7 @@ def process_camera(url, index):
         rects = non_max_suppression_fast(boundingboxes, 0.3)
 
         # Atualizar o tracker a cada 5 quadros
-        if total_frames % 5 == 0:
+        if total_frames % 1 == 0:
             objects = tracker.update(rects)
 
         for objectId, bbox in objects.items():
@@ -199,6 +199,7 @@ def process_camera(url, index):
 
                 # Registre o tempo de entrada
                 entry_time[objectId] = datetime.datetime.now()
+                entered_count += 1  # Incrementa o contador de entrada
 
                 print(
                     f"ID {objectId + 1} entrou às {entry_time[objectId].strftime('%H:%M:%S')} - Camera: {index + 1}"
@@ -215,6 +216,7 @@ def process_camera(url, index):
                 if objectId not in exit_time_dict:
                     # Registre o tempo de saída
                     exit_time_dict[objectId] = datetime.datetime.now()
+                    exited_count += 1  # Incrementa o contador de saída
 
                     # Calcule o tempo de permanência
                     time_in_frame = (
@@ -278,7 +280,8 @@ def process_camera(url, index):
             1,
         )
 
-        info_text = f"Total: {total_objects_count}  Entrou: {entered_count}  Saiu: {exited_count}"
+        info_text = f"Total: {total_objects_count}  Entrou: {entered_count} Saiu: {exited_count}"
+        exit = f""
         cv2.putText(
             frame,
             info_text,
@@ -315,16 +318,8 @@ def main():
         # Adicione mais URLs conforme necessário
     ]
 
-    # Inicie uma thread para cada câmera
-    threads = []
-    for i, url in enumerate(urls):
-        thread = Thread(target=process_camera, args=(url, i))
-        threads.append(thread)
-        thread.start()
-
-    # Aguarde todas as threads terminarem
-    for thread in threads:
-        thread.join()
+    # Processa apenas a primeira câmera da lista
+    process_camera(urls[0], 0)
 
 
 if __name__ == "__main__":
