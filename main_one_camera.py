@@ -249,8 +249,8 @@ def process_camera(url, index):
             1,
         )
 
-        #lpc_count = len(objects)
-        #opc_count = len(object_id_list)
+        lpc_count = len(objects)
+        opc_count = len(object_id_list)
 
         #lpc_txt = f"LPC: {lpc_count} - Camera: {index + 1}"
         #opc_txt = f"OPC: {opc_count} - Camera: {index + 1}"
@@ -306,7 +306,7 @@ def process_camera(url, index):
 def main():
     # Lista de URLs das câmeras
     urls = [
-        'rtsp://admin:Afrizona2022@192.168.1.10:554/Streaming/Channels/0',
+        'rtsp://admin:Afrizona2022@192.168.1.56:554/Streaming/Channels/0',
         'rtsp://admin:Afrizona2022@192.168.1.3:554/Streaming/Channels/1',
         'rtsp://admin:Afrizona2022@192.168.1.61:554/Streaming/Channels/2',
         # Adicione mais URLs conforme necessário
