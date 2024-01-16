@@ -176,14 +176,14 @@ def process_camera(url, index):
 
             cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 2)
             text = f"Tempo: {time_in_frame_str}"
-            #text = f"Tempo: {time_in_frame_str} - Camera: {index + 1}"
+            # - Camera: {index + 1}
             cv2.putText(
                 frame,
                 text,
                 (x1, y1 - 5),
                 cv2.FONT_HERSHEY_COMPLEX_SMALL,
                 1,
-                (0, 255, 0),
+                (0, 0, 255),
                 1,
             )
 
@@ -194,6 +194,8 @@ def process_camera(url, index):
                 # Registre o tempo de entrada
                 entry_time[objectId] = datetime.datetime.now()
                 entered_count += 1  # Incrementa o contador de entrada
+
+                total_objects_count += 1  # Incrementa o contador total de objetos
 
                 print(
                     f"ID {objectId + 1} entrou às {entry_time[objectId].strftime('%H:%M:%S')} - Camera: {index + 1}"
@@ -252,27 +254,27 @@ def process_camera(url, index):
         lpc_count = len(objects)
         opc_count = len(object_id_list)
 
-        #lpc_txt = f"LPC: {lpc_count} - Camera: {index + 1}"
-        #opc_txt = f"OPC: {opc_count} - Camera: {index + 1}"
+        lpc_txt = f"LPC: {lpc_count} - Camera: {index + 1}"
+        opc_txt = f"OPC: {opc_count} - Camera: {index + 1}"
 
-        #cv2.putText(
-            #frame,
-            #lpc_txt,
-            #(5, 60),
-            #cv2.FONT_HERSHEY_COMPLEX_SMALL,
-            #1,
-            #(0, 255, 0),
-            #1,
-        #)
-        #cv2.putText(
-            #frame,
-            #opc_txt,
-            #(5, 90),
-            #cv2.FONT_HERSHEY_COMPLEX_SMALL,
-            #1,
-            #(0, 255, 0),
-            #1,
-        #)
+        # cv2.putText(
+        #     frame,
+        #     lpc_txt,
+        #     (5, 60),
+        #     cv2.FONT_HERSHEY_COMPLEX_SMALL,
+        #     1,
+        #     (0, 255, 0),
+        #     1,
+        # )
+        # cv2.putText(
+        #     frame,
+        #     opc_txt,
+        #     (5, 90),
+        #     cv2.FONT_HERSHEY_COMPLEX_SMALL,
+        #     1,
+        #     (0, 255, 0),
+        #     1,
+        # )
 
         info_text = f"Total: {total_objects_count}  Entrou: {entered_count} Saiu: {exited_count}"
         exit = f""
@@ -291,8 +293,8 @@ def process_camera(url, index):
         # sound_3_or_more.play()
 
         # Se houver 3 ou mais pessoas, reproduza o som
-        #if opc_count >= 3:
-            #winsound.Beep(1000, 500)  # Exemplo: Frequência 1000 Hz, duração 500 ms
+        if opc_count >= 3:
+            winsound.Beep(1000, 500)  # Exemplo: Frequência 1000 Hz, duração 500 ms
 
         cv2.imshow(f"Camera {index + 1} - {'Sala de Monitoramento' if index == 0 else ('Afrilearning' if index == 1 else 'NomeDaTerceiraCamera')}", frame)
         key = cv2.waitKey(1)
